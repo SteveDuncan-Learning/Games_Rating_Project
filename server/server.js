@@ -44,14 +44,38 @@ app.use(cookieParser());
 //define or require routes
 //GET
 app.get('/',(req,res)=>{
-
     Article.find().sort({_id:'asc'}).limit(10).exec((err,doc)=>{
-        if(err) return res.status(400).send(err);
-        res.render('home',{
+
+        doc.forEach(function(item){
+
+            var pipeline = [
+                {$match: {"titlePost":item.title}},
+                {$group: {_id: null,aveRating: {$avg: "$rating"}}},
+                {$project: {_id: 0,aveRating:1}}
+            ]
+
+            UserReviews.aggregate(pipeline,function(err,result){
+                if(err) {console.log(err)}
+
+                const ave = (Object.values(result[0]))[0]
+                // console.log(ave)
+                //How to get the ave val out of the function and into the returned doc??
+                
+                item["aveRating"] = ave;
+                Article.aggregate([{$addFields: {newField: "WTF??"}}])
+                
+            })
+            
+            console.log(item)
+        })
+        
+        return res.render('home',{
             articles:doc
+            
         })
     })
-
+    
+    
 })
 
 app.get('/register',auth,(req,res)=>{
