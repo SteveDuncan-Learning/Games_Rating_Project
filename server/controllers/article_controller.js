@@ -16,6 +16,8 @@ exports.home_ratings_ave_get = function (req, res) {
             })          
         })
         return res.render('home', {
+            dashboard: true,
+            isAdmin: req.user.role === 1 ? true : false,
             articles: doc
         })
     })

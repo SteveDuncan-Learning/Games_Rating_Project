@@ -13,6 +13,8 @@ const app = express();
 const port = process.env.PORT;
 
 //set path for static files and views
+app.use('/css',express.static(__dirname + './../public/css'));
+app.use('/js',express.static(__dirname + './../public/js'));
 
 //set template engine to use
 app.engine('hbs',hbs({
@@ -27,16 +29,7 @@ app.set('view engine','hbs')
 mongoose.promise = global.Promise;
 mongoose.connect(config.DATABASE);
 
-//models
-const {User} = require('./models/user');
-const {Article} = require('./models/article');
-const {UserReviews} = require('./models/user_reviews');
-
 //middleware
-app.use('/css',express.static(__dirname + './../public/css'));
-app.use('/js',express.static(__dirname + './../public/js'));
-
-const {auth} = require('./middleware/auth');
 
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -44,7 +37,6 @@ app.use(cookieParser());
 //define or require routes
 const router = require('./routes/routes.js')
 app.use('/', router);
-
 
 //set up server
 app.listen(config.PORT,()=>{

@@ -1,8 +1,9 @@
-<div class="container wrapper ">
-
-    {{!-- {{>dashboard_nav}} --}}
-    
-    {{!-- <div class="dash_body"> --}}
+{{!-- <div class="container wrapper"> --}}
+<div class="container dashboard">
+    <div class='dash_nav'>
+        {{>dashboard_nav}}
+    </div>
+    <div class="dash_body container wrapper">
         {{#each articles}}
         <a href="/games/{{this._id}}">
             <div class="item">
@@ -20,6 +21,6 @@
             </div>
         </a>
         {{/each}}
-
-    {{!-- </div> --}}
+    </div>
+    </div>
 </div>

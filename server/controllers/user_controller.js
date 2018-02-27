@@ -24,7 +24,7 @@ exports.user_register_get = function(req, res){
 }
 
 exports.user_dashboard_get = function(req, res){
-    if (!req.user) return res.redirect('/login');
+    if (!req.user) return res.redirect('/');
     
     res.render('dashboard', {
         dashboard: true,
@@ -33,13 +33,13 @@ exports.user_dashboard_get = function(req, res){
     });
 }
 
-exports.user_dashboard_articles_get = function(req, res){
-    if (!req.user) return res.redirect('/login');
-    res.render('admin_articles', {
-        dashboard: true,
-        isAdmin: req.user.role === 1 ? true : false
-    });
-}
+// exports.user_dashboard_articles_get = function(req, res){
+//     if (!req.user) return res.redirect('/login');
+//     res.render('admin_articles', {
+//         dashboard: true,
+//         isAdmin: req.user.role === 1 ? true : false
+//     });
+// }
 
 exports.user_login_post = function (req, res) {
     User.findOne({ 'email': req.body.email }, (err, user) => {
