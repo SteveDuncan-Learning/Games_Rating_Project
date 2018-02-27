@@ -1,4 +1,5 @@
-var express = require('express');
+// require dependencies
+const express = require('express');
 const moment = require('moment');
 const { auth } = require('./../middleware/auth');
 
@@ -6,11 +7,13 @@ const { auth } = require('./../middleware/auth');
 const { User } = require('./../models/user');
 const { UserReviews } = require('./../models/user_reviews');
 
+// controller to show login page 
 exports.user_login_get = function(req, res){
     if (req.user) return res.redirect('/dashboard');
     res.render('login');
 }
 
+// controller to log out user
 exports.user_logout = function(req, res){
     req.user.deleteToken(req.token, (err, user) => {
         if (err) return res.status(400).send(err);
@@ -18,11 +21,13 @@ exports.user_logout = function(req, res){
     })
 }
 
+// controller to show user registration page
 exports.user_register_get = function(req, res){
     if (req.user) return res.redirect('/dashboard');
     res.render('register');
 }
 
+// controller to show user dashboard
 exports.user_dashboard_get = function(req, res){
     if (!req.user) return res.redirect('/');
     
@@ -33,18 +38,12 @@ exports.user_dashboard_get = function(req, res){
     });
 }
 
-// exports.user_dashboard_articles_get = function(req, res){
-//     if (!req.user) return res.redirect('/login');
-//     res.render('admin_articles', {
-//         dashboard: true,
-//         isAdmin: req.user.role === 1 ? true : false
-//     });
-// }
-
+// controller to login user
 exports.user_login_post = function (req, res) {
+    // check if email already registered
     User.findOne({ 'email': req.body.email }, (err, user) => {
         if (!user) return res.status(400).json({ message: 'Auth failed, wrong email' })
-
+        // user validation
         user.comparePassword(req.body.password, function (err, isMatch) {
             if (err) throw err;
             if (!isMatch) return res.status(400).json({ message: 'Auth failed, wrong password' });
@@ -56,11 +55,7 @@ exports.user_login_post = function (req, res) {
     })
 }
 
-exports.user_register_get = function (req, res) {
-    if (req.user) return res.redirect('/dashboard');
-    res.render('register')
-}
-
+// controller to add user registration to database
 exports.user_register_post = function(req, res){
     const user = new User(req.body);
 
