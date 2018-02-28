@@ -38,7 +38,7 @@ exports.game_ratings_ave_get = function (req, res) {
             article["aveRating"] = result;
         })         
 
-        if (err) res.status(400).send(err);
+        if (err) return res.status(400).send(err);
         // find all reviews matching selected game
         UserReviews.find({ 'postID': req.params.id }).exec((err, userReviews) => {
             res.render('article', {
@@ -95,7 +95,7 @@ exports.add_article_post = function (req, res) {
     });
 
     article.save((err, doc) => {
-        if (err) res.status(400).send(err);
+        if (err) return res.status(400).send(err);
         res.status(200).send();
     })
 }
